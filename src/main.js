@@ -6,8 +6,12 @@ import router from './router'
 // 载入muse-ui组件
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-Vue.use(MuseUI)
+import VueAwesomeSwiper from 'vue-awesome-swiper'
 
+import axios from 'axios'
+Vue.prototype.$http = axios
+
+Vue.use(MuseUI,VueAwesomeSwiper)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

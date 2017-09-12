@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # wangyi_cloud
 
 > A Vue.js project
@@ -19,3 +20,7 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+=======
+# friendly-chainsaw
+一个基于vue的网易云项目
+>>>>>>> ea21c14631f48885bfa3c6c9d257c9e7b33567b3

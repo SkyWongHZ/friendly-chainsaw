@@ -1,6 +1,7 @@
 缺少less模块
 
-先cnpm  install  less  --save-dev
+先npm install --save-dev less
+npm install --save-dev file-loader
 再:  {test: /\.less$/ ,
         loader: 'style!css!less'},
 
@@ -15,7 +16,9 @@ Vue.use(MuseUI)
 
 就少了最后一句话,坑了我一个多小时
 
-muse主题背景一开始是蓝色的,需要自定义主题背景颜色,assets文件下的theme.less就是用来自定义主题的,
+muse主题背景一开始是蓝色的,需要自定义主题背景颜色,assets文件下的theme.less就是用来自
+
+定义主题的,
 定义好后需要在需要的vue文件下的css中引入,用@import的方式引入
 
 
@@ -49,7 +52,9 @@ export default
 
 keep-alive:
 优点:用<keep-alive>包含<router-view>实现页面缓存，加速页面加载
-缺点:开启路由外面的一层包裹keep-alive在用生命周期相关钩子函数时会有坑,以后碰到这个的时候注意
+缺点:开启路由外面的一层包裹keep-alive在用生命周期相关钩子函数时会有坑,以后碰到这个的
+
+时候注意
 
 vue2相对于vue1的区别:加入了虚拟Dom.
 
@@ -58,28 +63,35 @@ vue懒加载用法?
 
 less语言写法:&可以替代父级元素做简写  如a:hover写成&：hover  div>p写成&>p
 
-vue2废弃掉了内置过滤器,需要自己写过滤器,vue2.0里 管道符‘|’只能用在mousetache和v-bind中
+vue2废弃掉了内置过滤器,需要自己写过滤器,vue2.0里 管道符‘|’只能用在mousetache和v-
+
+bind中
 
 :key一般就在v-for循环时用到,个人理解是可写可不写,文档写的太官方,没看懂它的意思
 :key="item.id"
 
 
-1）git  init
-初始化一个git
-2) vim .gitignore 新增以及编写这个文件
-node_modules/
-意思就是上传的时候忽略这个文件夹以及里面的内容，因为我上传的是nodejs项目文件，所以不用把node_modules上传上去
-3）git add .    添加代码到git
-4)  git commit -m '第一个版本'
-版本的备注信息
-5) git remote add origin https://github.com/jasonzhangdong/auth2.0test.git
-将代码关联到github上面，后面的url就是第二部拷贝下来的那个路径
-6）git push -u origin master
-     将代码推送上去
+早上上传vue的网易项目到github时,由于之前在github上自己写了readme.md,自己在本地又创建
+
+了,所以会冲突,解决冲突的办法有三种,
+1:删除网上的readme.md;
+2git  pull  origin  master;
+3git push  origin master -f(只要在后面加上-f强制提交即可)
 
 
+window下光标经常失去  搜索"Windows失去焦点"
+
+vue  router-link语法里面的router-link后面必须加to="",否则语法会出错;
+
+es6语法恶补;
+vue滚动加载更多;
+vue路由传参
 
 
+去除缓存的方法:
+?param=Math.random()
+
+eslint语法设置的过于恶心,以后看到有eslint设置的直接在webpack中注释掉相关代码.
 
 
 

@@ -16,24 +16,24 @@
   </div>
 </template>
 <style lang="less" scoped>
-  @import "../assets/theme.less";
-  .img-response {
+@import "../assets/theme.less";
+.img-response {
     max-width: 100%;
     height: auto;
-  }
-  .wrapper {
+}
+.wrapper {
     width: 100%;
     padding:0 10px;
-    height: 28rem;
+    height: 40rem;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-  }
-  .title {
+}
+.title {
     margin: .2rem 0 .3rem 0;
     padding-left: .2rem;
     border-left: .15rem solid @primaryColor;
-  }
-  .list {
+}
+.list {
     &-bar {
       position: absolute;
       top: 0;
@@ -45,36 +45,37 @@
       background-color: rgba(0,0,0,.2);
     }
     &-item {
-      position: relative;
-      margin: 0 5px 5px 10px;
-      a {
-        color:rgba(0,0,0,.87);
-      }
+        position: relative;
+        margin: 0 5px 5px 10px;
+        a {
+          color:rgba(0,0,0,.87);
+        }
     }
     &-img {
-      width: 8rem;
-      height: 8rem;
+      width: 12rem;
+      height: 10rem;
     }
-    &-img[lazy=loading] {
+     &-img[lazy=loading] {
       background: url('../../static/default_cover.png') no-repeat;
       background-size: cover;
     }
 
-    &-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+        &-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
-  }
+}
 </style>
 <script>
   import api from "../api"
   export default{
       data(){
+        // const list=[];
         return {
-          list:[],
+          playlists:[],
           offset:0,
           loading: false,
           scroller: null
@@ -82,34 +83,38 @@
 
       },
       created(){
-            this.get()
+        this.get()
       },
       mounted () {
         this.scroller = this.$el
       },
       methods: {
-        loadMore () {
+        get() {
           this.loading = true
-          setTimeout(() => {
-            for (let i = 0; i < this.list; i++) {
-              this.list.push('item' + (i + 1))
+          this.$http.get(api.getPlayListByWhere('全部', 'hot', this.offset, true, 6)).then(res => {
+            // success callback
+            // console.log('success  in singlist')
+            const total=res.data.total;
+            const list=res.data.playlists
+            for(let i=0;i<list.length;i++){
+                this.playlists.push(list[i])
             }
-            this.num += 10
-            this.loading = false
-          }, 2000)
+            this.offset+=6;
+            if(this.offset>total){
+              this.offset=total;
+            }
+            this.loading=false
 
-
-            this.$http.get(api.getPlayListByWhere('全部', 'hot', this.offset, true, 6)).then(response => {
-              // success callback
-              total=response.data.total;
-              this.list=response.data.playlists
-              console.log('sss')
-            }, response => {
-              // error callback
-              console.log('error')
-            })
+          }, err => {
+            // error callback
+            console.log('断网请检查您的网络状况')
+          })
 
         },
+        loadMore(){
+          this.get();
+        }
       }
+
   }
 </script>

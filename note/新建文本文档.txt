@@ -94,21 +94,21 @@ vue路由传参
 eslint语法设置的过于恶心,以后看到有eslint设置的直接在webpack中注释掉相关代码.
 
 
+****************************9.13
 
+a(){}与a:function(){}区别   还有function a(){}用法
+typescript是什么鬼?
 
+vue路由传参
+比如我想把A页面的参数id传到B页面中去,路由分别是'/a','/b'，首先B页面必须有一个路由名字name,如nameB,其次在B页面
+path后面加上'/b/:id',然后在A页面配置路由跳转,<router-link :to="{name:nameB,params:{id:id}}">跳转到B页面,
+在B页面想接受到A页面的参数即可用this.$route.params.id</router-link>
 
+控制前进后退步数  this.$router.go(n)  n是前进后退的步数
+**************
+左上角图片coverImgUrl
 
+右上角   name
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+creator.avatarUrl
+creator.nickname

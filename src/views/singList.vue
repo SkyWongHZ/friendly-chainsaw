@@ -4,7 +4,7 @@
       <div class="title">全部歌单 </div>
       <mu-flexbox wrap="wrap" justify="space-around" class="box" :gutter="0">
         <mu-flexbox-item basis="40%" class="list-item" v-for="item in playlists">
-          <router-link to="">
+          <router-link :to="{name:'playlistDetail',params:{id:item.id}}">
             <div class="list-bar">{{item.playCount}}</div>
             <img class="list-img img-response" :src="item.coverImgUrl + '?param=300y300'">
             <div class="list-name">{{item.name}}</div>
@@ -105,7 +105,7 @@
             }
             this.loading=false
 
-          }, err => {
+          }, err=> {
             // error callback
             console.log('断网请检查您的网络状况')
           })

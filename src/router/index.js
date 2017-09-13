@@ -5,6 +5,7 @@ import popular from '../views/popular'
 import rangingList from '../views/rankingList'
 import singList from '../views/singList'
 import hotSinger from '../views/hotSinger'
+import playlistDetail from '../views/playlistDetail'
 
 Vue.use(Router)
 
@@ -33,6 +34,10 @@ export default new Router({
         },
       ]
     },
-
+    {
+      path: '/playlistDetail/:id',
+      name: 'playlistDetail',
+      component: playlistDetail,
+    },
   ]
 })

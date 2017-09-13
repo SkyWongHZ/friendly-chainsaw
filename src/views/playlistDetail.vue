@@ -1,0 +1,227 @@
+<template>
+    <div class="playList">
+        <div class="fixed-title"  style="transition: opacity .1s;">
+            <mu-appbar>
+                <mu-icon-button icon='arrow_back'  slot="left" @click="back" />
+                <div class="play-title">
+                    <div class="play-name"><span>{{fname}}</span></div>
+                </div>
+            </mu-appbar>
+        </div>
+        <div class="playlist-info">
+            <div class="info-wrapper">
+                <div class="info-gallery">
+                    <span>{{playlist.coverImgUrl}}</span>
+                    <img  alt="">
+                </div>
+                <div class="info-title">
+                    <p class="titile">{{playlist.name}}</p>
+                    <p class="author">
+                        <mu-avatar slot="left"  :size="30" :iconSize="20"/>
+                        <span>{{playlist.creator.nickname}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="bg-mask"></div>
+            <div class="bg-player" id="backImg"  ></div>
+        </div>
+        <div class="playlist-holder">
+            <div class="add-all">
+                <mu-flat-button label="播放全部" class="demo-flat-button" icon="add_circle_outline" />
+                <mu-divider/>
+            </div>
+            <div>
+                <mu-circular-progress :size="40" class="center" />
+                <mu-list  >
+                    <div>
+                        <mu-list-item >
+                            <span slot="left" class="indexStyle">index + 1</span>
+                        </mu-list-item>
+                        <mu-divider inset/>
+                    </div>
+                </mu-list>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<style lang="less" scoped>
+    .fixed-title {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 56px;
+        left: 0;
+        z-index: 15;
+    }
+
+    // 修改默认的bar样式
+    .mu-appbar {
+        background-color: transparent;
+    }
+    .bar-line {
+        display: block;
+        bottom: 0 ;
+        left: 0;
+        display:block;
+        width: 100%;
+        height: 0.05rem;
+        background: radial-gradient(#d3d3d3 -90%, transparent 100%);
+    }
+    .mu-paper-1 {
+        box-shadow: none;
+        > .mu-appbar-title {
+            text-align: center;
+            font-size: 14px;
+        }
+    }
+    // 歌单信息
+    .playlist-info {
+        position: relative;
+        padding: 60px .5rem 0 ;
+        height: 10rem;
+    }
+
+    .info-wrapper {
+        position: relative;
+        z-index: 10;
+        color: #fff;
+        .info-gallery {
+            position: relative;
+            float: left;
+            width: 6rem;
+            overflow: hidden;
+            span {
+                position: absolute;
+                display: block;
+                padding-right: 5px;
+                width: 100%;
+                left: 0;
+                top: 0;
+                font-size: 12px;
+                text-align: right;
+                background: rgba(0,0,0,.35);
+                z-index: 11;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        .info-title {
+            float: left;
+            width: 7.5rem;
+            margin-left: 1rem;
+            .title {
+                font-size: 16px;
+                word-wrap:normal;
+            }
+            .author {
+                span {
+                    overflow: hidden;
+                    display: inline-block;
+                    height: 30px;
+                    text-overflow: ellipsis;
+                    width: 5.4rem;
+                    white-space: nowrap;
+                    font-size: 14px;
+                    vertical-align: top;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+
+    .playlist-holder {
+        position: relative;
+        background: #fff;
+        z-index: 3;
+
+        .add-all {
+            padding-left: .4rem;
+        }
+    }
+
+    // 列表样式
+    .indexStyle {
+        padding-left: 10px;
+        font-size: 18px;
+        font-weight: bolder;
+    }
+    .mu-item-title {
+        white-space:nowrap;
+        height: 1.7rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .bg-player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom right;
+        filter: blur(40px);
+         -webkit-filter: blur(40px);
+        z-index: 1;
+    }
+    .bg-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #292a2b;
+        background-color: rgba(0,0,0,.35);
+        z-index: 2;
+    }
+    .center {
+        display: block!important;
+        margin: 10% auto 0;
+    }
+    .view {
+        width:100%;
+        margin-bottom:2.3rem;
+    }
+    .mu-item-title {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        line-height: 1.5;
+    }
+</style>
+<script>
+  import api from '../api'
+  export default{
+    data(){
+        return{
+            fname:'歌单',
+            playlist:[],
+            list:[]
+        }
+    },
+    created(){
+      this.get();
+    },
+    methods:{
+      back(){
+          this.$router.go(-1);
+      },
+      get(){
+        this.$http.get(api.getPlayListDetail(this.$route.params.id)).then((res) => {
+            console.log('scboy')
+            console.log(res)
+            this.playlist=res.data.playlist
+            this.list = res.data.playlist.tracks
+//          this.isloading = false
+        },err=>{
+            console.log('err，断网喽')
+        })
+      }
+    }
+  }
+</script>

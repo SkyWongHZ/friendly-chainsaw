@@ -1,6 +1,6 @@
 <template>
     <div class="playList">
-        <div class="fixed-title"  style="transition: opacity .1s;">
+        <div class="fixed-title" :style="{'background': 'rgba(206, 61, 62,'+opacity+')'}">
             <mu-appbar>
                 <mu-icon-button icon='arrow_back'  slot="left" @click="back" />
                 <div class="play-title">
@@ -11,19 +11,19 @@
         <div class="playlist-info">
             <div class="info-wrapper">
                 <div class="info-gallery">
-                    <span>{{playlist.coverImgUrl}}</span>
-                    <img  alt="">
+                    <span>{{playlist.playCount}}</span>
+                    <img  :src="playlist.coverImgUrl+'?param=300y300'" alt="">
                 </div>
                 <div class="info-title">
-                    <p class="titile">{{playlist.name}}</p>
+                    <p class="titile">{{playlistName}}</p>
                     <p class="author">
-                        <mu-avatar slot="left"  :size="30" :iconSize="20"/>
+                        <mu-avatar :src="playlist.creator.avatarUrl" slot="left"  :size="30" :iconSize="20"/>
                         <span>{{playlist.creator.nickname}}</span>
                     </p>
                 </div>
             </div>
             <div class="bg-mask"></div>
-            <div class="bg-player" id="backImg"  ></div>
+            <div class="bg-player" id="backImg" :style="{'background-image':'url(' + playlist.coverImgUrl + '?param=300y300)'}" ></div>
         </div>
         <div class="playlist-holder">
             <div class="add-all">
@@ -31,11 +31,12 @@
                 <mu-divider/>
             </div>
             <div>
-                <mu-circular-progress :size="40" class="center" />
+                <mu-circular-progress :size="40" class="center"  v-if="look"/>
                 <mu-list  >
-                    <div>
-                        <mu-list-item >
-                            <span slot="left" class="indexStyle">index + 1</span>
+                    <div v-for="(item,index) in  list">
+                        <mu-list-item :title="item.name" :describe="item.id" :describeText="item.ar[0].name">
+                            <!--<p>{{item.name}}</p>-->
+                            <span slot="left" class="indexStyle">{{index + 1}}</span>
                         </mu-list-item>
                         <mu-divider inset/>
                     </div>
@@ -196,16 +197,39 @@
 </style>
 <script>
   import api from '../api'
+  let storage=window.localStorage;
+  let playlistName;
   export default{
     data(){
         return{
             fname:'歌单',
             playlist:[],
-            list:[]
+            list:[],
+            playlistName:'',
+            look:false,
+            scrolled:false,
+            opacity:0
         }
     },
     created(){
       this.get();
+    },
+
+    mounted(){
+      console.log('playCount='+this.playlist.playCount);
+      console.log(this.playlist)
+      console.log(this.list)
+      window.addEventListener('scroll',this.handleScroll);
+    },
+    updated(){
+      playlistName= storage.getItem('playlistName')
+      this.playlistName=playlistName
+      console.log('playlistName='+playlistName)
+    },
+    destroyed(){
+      console.log('组件销毁前')
+      storage.removeItem('playlistName')
+      this.playlistName=playlistName
     },
     methods:{
       back(){
@@ -217,10 +241,26 @@
             console.log(res)
             this.playlist=res.data.playlist
             this.list = res.data.playlist.tracks
-//          this.isloading = false
+            storage.setItem("playlistName",res.data.playlist.name);
+            console.log(this.list)
         },err=>{
             console.log('err，断网喽')
         })
+      },
+      handleScroll(){
+          if(window.scrollY>0){
+            this.fname=this.playlistName;
+            /*234-56,即positon:fixed跑过的长度*/
+            this.opacity=window.scrollY/178;
+            console.log('scrollY='+window.scrollY)
+            console.log('opacity='+this.opacity)
+          }else{
+            this.fname='歌单'
+            this.opacity=0;
+          }
+//        this.scrolled=window.scrollY>0;
+////        alert('滚动时间触发了')
+//          this.fname=this.playlistName;
       }
     }
   }

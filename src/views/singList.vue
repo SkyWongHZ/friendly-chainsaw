@@ -52,8 +52,8 @@
         }
     }
     &-img {
-      width: 12rem;
-      height: 10rem;
+      width: 8rem;
+      height: 8rem;
     }
      &-img[lazy=loading] {
       background: url('../../static/default_cover.png') no-repeat;

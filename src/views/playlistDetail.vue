@@ -16,7 +16,7 @@
                 </div>
                 <div class="info-title">
                     <p class="titile">{{playlistName}}</p>
-                    <p class="author">
+                    <p class="author" v-if="playlist.creator">
                         <mu-avatar :src="playlist.creator.avatarUrl" slot="left"  :size="30" :iconSize="20"/>
                         <span>{{playlist.creator.nickname}}</span>
                     </p>
@@ -34,7 +34,7 @@
                 <mu-circular-progress :size="40" class="center"  v-if="look"/>
                 <mu-list  >
                     <div v-for="(item,index) in  list">
-                        <mu-list-item :title="item.name" :describe="item.id" :describeText="item.ar[0].name">
+                        <mu-list-item :title="item.name" :describe="item.id" :describeText="item.ar[0].name" @click="listClick(item)">
                             <!--<p>{{item.name}}</p>-->
                             <span slot="left" class="indexStyle">{{index + 1}}</span>
                         </mu-list-item>
@@ -43,6 +43,7 @@
                 </mu-list>
             </div>
         </div>
+        <footerBottom v-if="singShow" :item="item"></footerBottom>
     </div>
 </template>
 
@@ -197,6 +198,7 @@
 </style>
 <script>
   import api from '../api'
+  import footerBottom from './playbar'
   let storage=window.localStorage;
   let playlistName;
   export default{
@@ -208,23 +210,28 @@
             playlistName:'',
             look:false,
             scrolled:false,
-            opacity:0
+            opacity:0,
+            singShow:false,
+            item:'',
         }
+    },
+    components: {
+      footerBottom
     },
     created(){
       this.get();
     },
 
     mounted(){
-      console.log('playCount='+this.playlist.playCount);
-      console.log(this.playlist)
-      console.log(this.list)
+//      console.log('playCount='+this.playlist.playCount);
+//      console.log(this.playlist)
+//      console.log(this.list)
       window.addEventListener('scroll',this.handleScroll);
     },
     updated(){
       playlistName= storage.getItem('playlistName')
       this.playlistName=playlistName
-      console.log('playlistName='+playlistName)
+//      console.log('playlistName='+playlistName)
     },
     destroyed(){
       console.log('组件销毁前')
@@ -237,12 +244,14 @@
       },
       get(){
         this.$http.get(api.getPlayListDetail(this.$route.params.id)).then((res) => {
-            console.log('scboy')
-            console.log(res)
+//            console.log('scboy')
+//            console.log(res)
             this.playlist=res.data.playlist
             this.list = res.data.playlist.tracks
             storage.setItem("playlistName",res.data.playlist.name);
-            console.log(this.list)
+//            console.log(this.list)
+//            console.log('avatarUrl='+this.playlist.creator.avatarUrl);
+//            console.log('nickname='+this.playlist.creator.nickname);
         },err=>{
             console.log('err，断网喽')
         })
@@ -261,7 +270,12 @@
 //        this.scrolled=window.scrollY>0;
 ////        alert('滚动时间触发了')
 //          this.fname=this.playlistName;
-      }
+      },
+      listClick(item){
+          this.singShow=true;
+//         把形参赋值给一个变量,再通过props的方式把变量item传递给子组件
+          this.item=item;
+      },
     }
   }
 </script>

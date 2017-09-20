@@ -6,8 +6,8 @@ import rangingList from '../views/rankingList'
 import singList from '../views/singList'
 import hotSinger from '../views/hotSinger'
 import playlistDetail from '../views/playlistDetail'
-import list from '../views/list'
-import playbar from '../views/playbar'
+import playerDetail from '../views/playerDetail'
+
 
 Vue.use(Router)
 
@@ -40,20 +40,12 @@ export default new Router({
       path: '/playlistDetail/:id',
       name: 'playlistDetail',
       component: playlistDetail,
-      // children:[
-      //   {
-      //     path:'/playbar',
-      //     name:'playbar',
-      //     component:playbar
-      //
-      //   },
-      // ]
     },
-    // {
-    //   path: '/list',
-    //   name: 'list',
-    //   component: list,
-    // },
+    {
+      path: '/playerDetail/:item',
+      name: 'playerDetail',
+      component: playerDetail,
+    },
 
   ]
 })

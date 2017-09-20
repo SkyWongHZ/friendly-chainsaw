@@ -2,8 +2,8 @@
   <div class="foot">
     <div class="player-mini">
       <div class="mini-content" >
-        <audio id="audio"/>
-        <div class="cover">
+        <audio id="myAudio"></audio>
+        <div class="cover" @click="popup()">
           <mu-circular-progress  :size="30" v-if="!isloading"/>
           <img class="xmplogo" :src="item.al.picUrl" v-show="isloading">
         </div>
@@ -164,18 +164,29 @@
     ],
     data(){
         return{
-          isloading:true
+          isloading:true,
+          playbarItem:'',
         }
 
     },
     created(){
 //        console.log(this.list);
 //        console.log('name='+this.list[0].name)
+
         console.log(this.item)
     },
     methods:{
       playSings(){
-          alert(111)
+        var myAudio=document.getElementById('myAudio');
+        myAudio.src = '../static/红豆.mp3';
+        myAudio.play();
+        myAudio.loop = true;
+        myAudio.preload = true;
+        myAudio.currentTime;
+        alert('播放成功')
+      },
+      popup(){
+         this.$router.push({name:'playerDetail',params:{item:this.item}});
       }
     }
 

@@ -261,8 +261,6 @@
             this.fname=this.playlistName;
             /*234-56,即positon:fixed跑过的长度*/
             this.opacity=window.scrollY/178;
-            console.log('scrollY='+window.scrollY)
-            console.log('opacity='+this.opacity)
           }else{
             this.fname='歌单'
             this.opacity=0;

@@ -13,7 +13,7 @@
         </div>
         <div class="control">
           <mu-icon-button class="mini-btn player-list" />
-          <mu-icon-button class="mini-btn player" @click="playSings"/>
+          <mu-icon-button class="mini-btn player" :class="{pause:playState}" @click="playSings"/>
           <mu-icon-button class="mini-btn next"/>
         </div>
         <div class="pro">
@@ -158,35 +158,53 @@
 </style>
 
 <script>
+  import api from "../api"
   export default{
     props: [
       'item',
     ],
     data(){
-        return{
-          isloading:true,
-          playbarItem:'',
-        }
+      return{
+        isloading:true,
+        playbarItem:'',
+        singUrl:'',
+        playState:false,
+
+      }
 
     },
     created(){
-//        console.log(this.list);
-//        console.log('name='+this.list[0].name)
 
-        console.log(this.item)
     },
     methods:{
       playSings(){
         var myAudio=document.getElementById('myAudio');
-        myAudio.src = '../static/红豆.mp3';
-        myAudio.play();
-        myAudio.loop = true;
-        myAudio.preload = true;
-        myAudio.currentTime;
-        alert('播放成功')
+
+        console.log(this.item)
+        this.$http.get(api.getSong(this.item.id)).then((res) => {
+          this.singUrl=res.data.data[0].url;
+          console.log(this.singUrl);
+          myAudio.src =this.singUrl;
+          if(this.playState==false){
+            myAudio.play();
+            this.playState=true;
+          }else{
+            myAudio.pause();
+            this.playState=false;
+          }
+
+          myAudio.loop = true;
+          myAudio.preload = true;
+//          console.log(audio)
+//        alert('播放成功')
+        }).catch((err)=>{
+            console.log(err)
+            console.log('哎呦,断网喽')
+        })
+
       },
       popup(){
-         this.$router.push({name:'playerDetail',params:{item:this.item}});
+        this.$router.push({name:'playerDetail',params:{item:this.item}});
       }
     }
 
